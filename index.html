@@ -1,1 +1,725 @@
-You're welcome here!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DevStack Studio — Browser Extensions</title>
+  <meta name="description" content="A collection of privacy-first, clean, and useful browser extensions built by DevStack Studio.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+    :root {
+      --bg: #08080a;
+      --fg: #ececec;
+      --fg-2: #7a7a7a;
+      --fg-3: #444;
+      --border: #1a1a1e;
+      --accent: #7c6aef;
+      --accent-dim: rgba(124, 106, 239, 0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+      color: var(--fg);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ═══ NOISE OVERLAY ═══ */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 128px 128px;
+    }
+
+    /* ═══ NAV ═══ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8, 8, 10, 0.8);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+    .nav-inner {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--fg);
+    }
+    .nav-logo {
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-logo svg { width: 12px; height: 12px; color: #fff; }
+    .nav-wordmark {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+    }
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--fg-2);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 150ms;
+    }
+    .nav-links a:hover { color: var(--fg); }
+
+    /* ═══ HERO ═══ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 52px 40px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* animated gradient orb */
+    .hero-orb {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124, 106, 239, 0.08) 0%, transparent 70%);
+      top: 10%;
+      right: -10%;
+      animation: drift 20s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes drift {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(-80px, 40px) scale(1.1); }
+      100% { transform: translate(40px, -30px) scale(0.95); }
+    }
+
+    /* vertical accent line */
+    .hero-line {
+      position: absolute;
+      left: 40px;
+      top: 52px;
+      bottom: 80px;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--border) 0%, var(--accent) 40%, var(--accent) 60%, var(--border) 100%);
+      opacity: 0.4;
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+      padding-left: 32px;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-size: clamp(44px, 7.5vw, 88px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.045em;
+      max-width: 800px;
+    }
+    .hero h1 .dim {
+      color: var(--fg-3);
+    }
+    .hero h1 .hi {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-body {
+      margin-top: 28px;
+      max-width: 440px;
+    }
+    .hero-body p {
+      font-size: 15px;
+      color: var(--fg-2);
+      line-height: 1.75;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 40px;
+      align-items: center;
+    }
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 150ms;
+    }
+    .hero-btn svg { width: 14px; height: 14px; }
+    .hero-btn--fill {
+      background: var(--accent);
+      color: #fff;
+    }
+    .hero-btn--fill:hover {
+      background: #6b58e8;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(124, 106, 239, 0.2);
+    }
+    .hero-btn--ghost {
+      color: var(--fg-2);
+      border: 1px solid var(--border);
+    }
+    .hero-btn--ghost:hover {
+      border-color: var(--fg-3);
+      color: var(--fg);
+    }
+
+    .hero-count {
+      margin-top: 64px;
+      display: flex;
+      gap: 48px;
+    }
+    .hero-stat-num {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 11px;
+      color: var(--fg-3);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    /* ═══ SHOWCASE ═══ */
+    .work {
+      border-top: 1px solid var(--border);
+    }
+    .work-head {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px 0;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .work-head h2 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fg-3);
+      white-space: nowrap;
+    }
+    .work-head .rule {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .work-list {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .work-row {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 32px;
+      align-items: start;
+      padding: 48px 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: background 200ms;
+      position: relative;
+    }
+    .work-row:first-child {
+      border-top: 1px solid var(--border);
+    }
+    .work-row:hover {
+      background: rgba(255,255,255,0.012);
+    }
+    .work-row:hover .work-arrow {
+      transform: translate(3px, -3px);
+      color: var(--accent);
+    }
+    .work-row:hover .work-num {
+      color: var(--accent);
+    }
+
+    .work-num {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--border);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      transition: color 300ms;
+      font-variant-numeric: tabular-nums;
+      padding-top: 4px;
+    }
+
+    .work-info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .work-name {
+      font-size: clamp(22px, 2.8vw, 32px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+    .work-desc {
+      font-size: 14px;
+      color: var(--fg-2);
+      max-width: 480px;
+      line-height: 1.65;
+    }
+    .work-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .work-tag {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--fg-3);
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      letter-spacing: 0.03em;
+    }
+
+    .work-end {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+      padding-top: 8px;
+    }
+    .work-view {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--fg-3);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 200ms;
+    }
+    .work-row:hover .work-view { color: var(--accent); }
+    .work-arrow {
+      color: var(--fg-3);
+      transition: all 200ms;
+    }
+    .work-arrow svg { width: 20px; height: 20px; }
+
+    /* ═══ MANIFESTO ═══ */
+    .manifesto {
+      border-top: 1px solid var(--border);
+      padding: 100px 40px;
+    }
+    .manifesto-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .manifesto-left {}
+    .manifesto-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .manifesto-title {
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+    }
+    .manifesto-title .dim { color: var(--fg-3); }
+    .manifesto-right {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .manifesto-item {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .manifesto-item:first-child {
+      border-top: 1px solid var(--border);
+    }
+    .manifesto-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+      padding-top: 2px;
+    }
+    .manifesto-item h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+    .manifesto-item p {
+      font-size: 13px;
+      color: var(--fg-2);
+      line-height: 1.6;
+    }
+
+    /* ═══ FOOTER ═══ */
+    .foot {
+      border-top: 1px solid var(--border);
+      padding: 28px 40px;
+    }
+    .foot-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .foot p {
+      font-size: 11px;
+      color: var(--fg-3);
+      letter-spacing: 0.02em;
+    }
+    .foot-links {
+      display: flex;
+      gap: 20px;
+    }
+    .foot-links a {
+      font-size: 11px;
+      color: var(--fg-3);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 150ms;
+    }
+    .foot-links a:hover { color: var(--fg); }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 900px) {
+      .hero { padding: 52px 24px 60px; }
+      .hero-line { left: 24px; }
+      .hero-inner { padding-left: 24px; }
+      .work-head { padding: 64px 24px 0; }
+      .work-list { padding: 0 24px; }
+      .manifesto { padding: 80px 24px; }
+      .manifesto-inner {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+      .foot { padding: 24px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-inner { padding: 0 20px; }
+      .nav-links a:not(:last-child) { display: none; }
+
+      .hero {
+        min-height: auto;
+        padding: 80px 20px 56px;
+      }
+      .hero-line { display: none; }
+      .hero-inner { padding-left: 0; }
+      .hero h1 { font-size: clamp(36px, 9vw, 56px); }
+      .hero-count { gap: 32px; margin-top: 48px; }
+
+      .work-head { padding: 56px 20px 0; }
+      .work-list { padding: 0 20px; }
+      .work-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 32px 0;
+      }
+      .work-num { font-size: 36px; }
+      .work-end {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 0;
+      }
+
+      .manifesto { padding: 64px 20px; }
+      .foot { padding: 20px; }
+      .foot-inner {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 599px) {
+      .nav-inner { padding: 0 16px; }
+      .hero { padding: 76px 16px 48px; }
+      .hero-count { flex-wrap: wrap; gap: 24px; }
+      .work-head { padding: 48px 16px 0; }
+      .work-list { padding: 0 16px; }
+      .work-row { padding: 28px 0; }
+      .manifesto { padding: 56px 16px; }
+      .manifesto-item { grid-template-columns: 1fr; gap: 8px; }
+      .foot { padding: 20px 16px; }
+    }
+
+    @media (max-width: 479px) {
+      .nav-wordmark { display: none; }
+      .hero h1 { font-size: 32px; }
+      .hero-stat-num { font-size: 24px; }
+      .work-num { font-size: 28px; }
+      .foot-links { flex-direction: column; gap: 8px; }
+    }
+
+    @media (max-width: 359px) {
+      .nav-inner, .hero, .work-head, .work-list, .manifesto, .foot {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+    }
+
+    @media (min-width: 1400px) {
+      .nav-inner, .hero-inner, .work-head, .work-list,
+      .manifesto-inner, .foot-inner {
+        max-width: 1200px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-orb { animation: none; }
+      .work-row:hover .work-arrow { transform: none; }
+      *, *::before, *::after { transition-duration: 0ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">
+        <div class="nav-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="nav-wordmark">DevStack Studio</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#manifesto">About</a>
+        <a href="mailto:mail@rupom.dev">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-orb"></div>
+    <div class="hero-line"></div>
+    <div class="hero-inner">
+      <div class="hero-tag">DevStack Studio</div>
+      <h1>Privacy-first<br>browser <span class="hi">tools</span></h1>
+      <div class="hero-body">
+        <p>Minimal, fast extensions that respect your data. No accounts, no tracking, no bloat. Built with vanilla code for people who care about what runs in their browser.</p>
+      </div>
+      <div class="hero-actions">
+        <a href="#work" class="hero-btn hero-btn--fill">
+          View extensions
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#manifesto" class="hero-btn hero-btn--ghost">How we build</a>
+      </div>
+      <div class="hero-count" id="hero-stats"></div>
+    </div>
+  </section>
+
+  <!-- SHOWCASE -->
+  <section class="work" id="work">
+    <div class="work-head">
+      <h2>Extensions</h2>
+      <div class="rule"></div>
+    </div>
+    <div id="work-list" class="work-list"></div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto" id="manifesto">
+    <div class="manifesto-inner">
+      <div class="manifesto-left">
+        <div class="manifesto-label">Philosophy</div>
+        <h2 class="manifesto-title">Built with<br><span class="dim">intention.</span></h2>
+      </div>
+      <div class="manifesto-right">
+        <div class="manifesto-item">
+          <div class="manifesto-num">01</div>
+          <div>
+            <h3>Local by default</h3>
+            <p>Every extension stores data in your browser only. No servers, no sync, no cloud. Your data never leaves your machine.</p>
+          </div>
+        </div>
+        <div class="manifesto-item">
+          <div class="manifesto-num">02</div>
+          <div>
+            <h3>Zero dependencies</h3>
+            <p>Hand-written HTML, CSS, and vanilla JavaScript. No frameworks, no bundlers, no node_modules. Ship nothing you don't need.</p>
+          </div>
+        </div>
+        <div class="manifesto-item">
+          <div class="manifesto-num">03</div>
+          <div>
+            <h3>Cross-browser native</h3>
+            <p>Built on Manifest V3 and web standards. One codebase runs on Chrome, Firefox, and Edge without modification.</p>
+          </div>
+        </div>
+        <div class="manifesto-item">
+          <div class="manifesto-num">04</div>
+          <div>
+            <h3>Open and free</h3>
+            <p>No paywalls, no premium tiers, no accounts. Every extension is free forever. If it's useful, it should be accessible.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="foot-inner">
+      <p>&copy; 2026 DevStack Studio</p>
+      <div class="foot-links">
+        <a href="mailto:mail@rupom.dev">Contact</a>
+        <a href="https://github.com/DevStack-Studio" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════
+    //  EXTENSIONS — add new entries here
+    // ═══════════════════════════════════════════════════════════
+    var EXTENSIONS = [
+      {
+        name: 'Element Hider Pro',
+        slug: 'element-hider-pro',
+        desc: 'Hide, blur, randomize text, or replace words on any webpage. A clean, fast way to take back control of what you see online.',
+        tags: ['Hide', 'Blur', 'Randomize', 'Word Rules']
+      },
+      {
+        name: 'SecuredRelay',
+        slug: 'securedrelay',
+        desc: 'Generate unique email aliases on the fly. Protect your real inbox from spam, tracking, and data leaks.',
+        tags: ['Email Aliases', 'Spam Protection', 'Privacy']
+      }
+    ];
+
+    // ═══════════════════════════════════════════════════════════
+    //  RENDER
+    // ═══════════════════════════════════════════════════════════
+    function render() {
+      // stats
+      var stats = document.getElementById('hero-stats');
+      if (stats) {
+        stats.innerHTML = ''
+          + '<div><div class="hero-stat-num">' + EXTENSIONS.length + '</div><div class="hero-stat-label">Extensions</div></div>'
+          + '<div><div class="hero-stat-num">3</div><div class="hero-stat-label">Browsers</div></div>'
+          + '<div><div class="hero-stat-num">0</div><div class="hero-stat-label">Data collected</div></div>';
+      }
+
+      // showcase rows
+      var el = document.getElementById('work-list');
+      if (!el) return;
+      var out = '';
+
+      for (var i = 0; i < EXTENSIONS.length; i++) {
+        var e = EXTENSIONS[i];
+        var num = String(i + 1).padStart(2, '0');
+
+        var tags = '';
+        for (var t = 0; t < e.tags.length; t++) {
+          tags += '<span class="work-tag">' + esc(e.tags[t]) + '</span>';
+        }
+
+        out += ''
+          + '<a href="' + escA(e.slug) + '/" class="work-row">'
+          +   '<div class="work-num">' + num + '</div>'
+          +   '<div class="work-info">'
+          +     '<div class="work-name">' + esc(e.name) + '</div>'
+          +     '<div class="work-desc">' + esc(e.desc) + '</div>'
+          +     '<div class="work-tags">' + tags + '</div>'
+          +   '</div>'
+          +   '<div class="work-end">'
+          +     '<div class="work-view">View</div>'
+          +     '<div class="work-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></div>'
+          +   '</div>'
+          + '</a>';
+      }
+
+      el.innerHTML = out;
+    }
+
+    function esc(s) {
+      var d = document.createElement('div');
+      d.appendChild(document.createTextNode(s));
+      return d.innerHTML;
+    }
+    function escA(s) {
+      return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    render();
+  </script>
+
+</body>
+</html>

@@ -1,1 +1,314 @@
-Page Doesn't Exist!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 — Page Not Found</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+    :root {
+      --bg: #08080a;
+      --fg: #ececec;
+      --fg-2: #7a7a7a;
+      --fg-3: #444;
+      --border: #1a1a1e;
+      --accent: #7c6aef;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+      color: var(--fg);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* noise */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 128px 128px;
+    }
+
+    /* ─── NAV ─── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8, 8, 10, 0.8);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+    .nav-inner {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--fg);
+    }
+    .nav-logo {
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-logo svg { width: 12px; height: 12px; color: #fff; }
+    .nav-wordmark {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+    }
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--fg-2);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 150ms;
+    }
+    .nav-links a:hover { color: var(--fg); }
+
+    /* ─── ERROR ─── */
+    .error {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 52px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .error-orb {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124, 106, 239, 0.05) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .error-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 40% 40% at 50% 50%, black 10%, transparent 60%);
+      -webkit-mask-image: radial-gradient(ellipse 40% 40% at 50% 50%, black 10%, transparent 60%);
+      pointer-events: none;
+    }
+    .error-body {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    .error-num {
+      font-size: clamp(120px, 22vw, 240px);
+      font-weight: 900;
+      line-height: 0.85;
+      letter-spacing: -0.06em;
+      color: var(--border);
+      user-select: none;
+    }
+    .error-msg {
+      font-size: clamp(16px, 2vw, 20px);
+      font-weight: 600;
+      margin-top: -4px;
+      letter-spacing: -0.01em;
+    }
+    .error-sub {
+      font-size: 14px;
+      color: var(--fg-2);
+      margin-top: 12px;
+      max-width: 360px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+    }
+    .error-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 36px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 20px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 7px;
+      text-decoration: none;
+      transition: all 150ms;
+      letter-spacing: 0.02em;
+    }
+    .btn svg { width: 13px; height: 13px; }
+    .btn--fill {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn--fill:hover {
+      background: #6b58e8;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(124, 106, 239, 0.2);
+    }
+    .btn--ghost {
+      color: var(--fg-2);
+      border: 1px solid var(--border);
+    }
+    .btn--ghost:hover {
+      border-color: var(--fg-3);
+      color: var(--fg);
+    }
+
+    /* ─── FOOTER ─── */
+    .foot {
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+    }
+    .foot-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .foot p {
+      font-size: 11px;
+      color: var(--fg-3);
+      letter-spacing: 0.02em;
+    }
+    .foot-links {
+      display: flex;
+      gap: 20px;
+    }
+    .foot-links a {
+      font-size: 11px;
+      color: var(--fg-3);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 150ms;
+    }
+    .foot-links a:hover { color: var(--fg); }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 768px) {
+      .nav-inner { padding: 0 20px; }
+      .nav-links a:not(:last-child) { display: none; }
+      .error { padding: 52px 20px; }
+      .foot { padding: 20px; }
+      .foot-inner {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 599px) {
+      .nav-inner { padding: 0 16px; }
+      .error { padding: 48px 16px; }
+      .error-actions { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 220px; justify-content: center; }
+      .foot { padding: 20px 16px; }
+    }
+
+    @media (max-width: 479px) {
+      .nav-wordmark { display: none; }
+      .foot-links { flex-direction: column; gap: 6px; }
+    }
+
+    @media (max-width: 359px) {
+      .nav-inner, .error, .foot { padding-left: 12px; padding-right: 12px; }
+    }
+
+    @media (min-width: 1400px) {
+      .nav-inner, .foot-inner { max-width: 1200px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">
+        <div class="nav-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="nav-wordmark">DevStack Studio</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/#work">Work</a>
+        <a href="mailto:mail@rupom.dev">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ERROR -->
+  <main class="error">
+    <div class="error-orb"></div>
+    <div class="error-grid"></div>
+    <div class="error-body">
+      <div class="error-num">404</div>
+      <div class="error-msg">Page not found</div>
+      <p class="error-sub">The page you're looking for doesn't exist, was moved, or never existed.</p>
+      <div class="error-actions">
+        <a href="javascript:history.back()" class="btn btn--ghost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+          Go back
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="foot-inner">
+      <p>&copy; 2026 DevStack Studio</p>
+      <div class="foot-links">
+        <a href="mailto:mail@rupom.dev">Contact</a>
+        <a href="https://github.com/RupomChowdhury" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

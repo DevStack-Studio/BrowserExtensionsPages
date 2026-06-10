@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SecuredRelay — Privacy Email Aliases</title>
+    <meta name="description" content="Generate unique privacy email aliases for any website. Stop spam, track data leaks, and keep your real inbox clean.">
+    <link rel="icon" type="image/png" sizes="48x48" href="icons/icon48.png">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #09090b;
+            --bg-card: #18181b;
+            --bg-elevated: #27272a;
+            --fg: #fafafa;
+            --fg-2: #a1a1aa;
+            --fg-3: #71717a;
+            --border: #27272a;
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --accent-glow: rgba(99, 102, 241, 0.15);
+            --green: #22c55e;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --max-w: 1080px;
+            --nav-h: 65px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+            color: var(--fg);
+            background: var(--bg);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            height: var(--nav-h);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            background: rgba(9, 9, 11, 0.8);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--fg);
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .nav-brand-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .nav-brand-icon svg { width: 14px; height: 14px; color: #fff; }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: var(--fg-2);
+            text-decoration: none;
+            transition: color 150ms;
+            white-space: nowrap;
+        }
+        .nav-links a:hover { color: var(--fg); }
+
+        .nav-cta {
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff !important;
+            background: var(--accent);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: opacity 150ms;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .nav-cta:hover { opacity: 0.85; }
+
+        /* ── HERO ── */
+        .hero {
+            padding-top: calc(var(--nav-h) + 60px);
+            padding-bottom: 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: var(--nav-h);
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(600px, 100vw);
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--fg-2);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            margin-bottom: 24px;
+        }
+
+        .hero-badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 5.5vw, 52px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.03em;
+            position: relative;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent-light), #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(15px, 2vw, 18px);
+            color: var(--fg-2);
+            max-width: 560px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 150ms;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 0 0 var(--accent-glow);
+        }
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--fg);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            background: var(--bg-elevated);
+            border-color: var(--fg-3);
+        }
+
+        /* ── BROWSER BADGES ── */
+        .browsers {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .browser-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--fg-2);
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 150ms;
+            white-space: nowrap;
+        }
+        .browser-badge:hover {
+            border-color: var(--accent);
+            color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+        .browser-badge svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+        /* ── PREVIEW ── */
+        .preview { padding: 50px 0 0; }
+
+        .preview-window {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            max-width: 560px;
+            width: 100%;
+            margin: 0 auto;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .preview-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 16px;
+            background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #3f3f46;
+            flex-shrink: 0;
+        }
+
+        .preview-body {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .preview-form {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .preview-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--fg-3);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .preview-input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-input {
+            flex: 1;
+            min-width: 0;
+            padding: 10px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--fg);
+            font-size: 14px;
+            font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+            outline: none;
+        }
+        .preview-input:focus { border-color: var(--accent); }
+
+        .preview-btn {
+            width: 35px;
+            height: 35px;
+            background: var(--accent);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 150ms;
+        }
+        .preview-btn:hover { background: var(--accent-light); }
+        .preview-btn svg { width: 16px; height: 16px; }
+
+        .preview-hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.15);
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--green);
+        }
+
+        /* ── SECTION SHARED ── */
+        .section-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: clamp(22px, 3.5vw, 36px);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-desc {
+            text-align: center;
+            color: var(--fg-2);
+            font-size: clamp(14px, 2vw, 16px);
+            max-width: 520px;
+            margin: 0 auto 48px;
+        }
+
+        /* ── FEATURES ── */
+        .features { padding: 80px 0; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            padding: 28px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--bg);
+            transition: border-color 200ms, background 200ms;
+        }
+        .feature-card:hover { background: var(--bg-card); }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            background: var(--accent-glow);
+            color: var(--accent-light);
+            flex-shrink: 0;
+        }
+        .feature-icon svg { width: 20px; height: 20px; }
+
+        .feature-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+        .feature-card p { font-size: 13px; color: var(--fg-2); line-height: 1.5; }
+
+        /* ── HOW IT WORKS ── */
+        .how { padding: 80px 0; }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .step { text-align: center; }
+
+        .step-num {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent-light);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .step h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+        .step p { font-size: 14px; color: var(--fg-2); max-width: 280px; margin: 0 auto; }
+
+        /* ── FAQ ── */
+        .faq { padding: 80px 0; }
+
+        .faq-list { max-width: 640px; margin: 48px auto 0; }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+        }
+        .faq-item:first-child { border-top: 1px solid var(--border); }
+
+        .faq-q {
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            user-select: none;
+        }
+
+        .faq-q::after {
+            content: '+';
+            font-size: 20px;
+            color: var(--fg-3);
+            transition: transform 200ms;
+            flex-shrink: 0;
+        }
+        .faq-item.open .faq-q::after { transform: rotate(45deg); }
+
+        .faq-a {
+            font-size: 14px;
+            color: var(--fg-2);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 300ms, padding 300ms;
+        }
+        .faq-item.open .faq-a { max-height: 200px; padding-top: 12px; }
+
+        /* ── CTA ── */
+        .cta { padding: 80px 0; text-align: center; }
+
+        .cta-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(500px, 100%);
+            height: 500px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-box h2 {
+            font-size: clamp(22px, 3vw, 32px);
+            font-weight: 800;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .cta-box p {
+            font-size: clamp(14px, 2vw, 16px);
+            color: var(--fg-2);
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .btn-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 150ms;
+            position: relative;
+        }
+        .btn-cta:hover {
+            background: var(--accent-light);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        footer p { font-size: 13px; color: var(--fg-3); }
+        footer a { color: var(--fg-2); text-decoration: none; }
+        footer a:hover { color: var(--accent); }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* ════════════════════════════════════════
+           RESPONSIVE BREAKPOINTS
+        ════════════════════════════════════════ */
+
+        /* ── Large tablets / small desktops (≤900px) ── */
+        @media (max-width: 900px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .steps {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+        }
+
+        /* ── Tablets (≤768px) ── */
+        @media (max-width: 768px) {
+            :root { --nav-h: 60px; }
+
+            .container { padding: 0 20px; }
+
+            /* Nav: hide text links, keep CTA */
+            .nav-links a:not(.nav-cta) { display: none; }
+            .nav-cta { padding: 7px 14px; font-size: 12px; }
+
+            .hero {
+                padding-top: calc(var(--nav-h) + 48px);
+                padding-bottom: 48px;
+            }
+
+            .hero-buttons { gap: 10px; }
+
+            .browsers {
+                margin-top: 32px;
+                gap: 10px;
+            }
+            .browser-badge { padding: 9px 16px; font-size: 12px; }
+
+            .preview { padding: 40px 0 0; }
+            .preview-body { padding: 20px; }
+
+            .features { padding: 64px 0; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .feature-card { padding: 22px; }
+            .section-desc { margin-bottom: 36px; }
+
+            .how { padding: 64px 0; }
+            .steps {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+                margin-top: 36px;
+            }
+            .step p { font-size: 13px; }
+
+            .faq { padding: 64px 0; }
+            .faq-list { margin-top: 36px; }
+
+            .cta { padding: 64px 0; }
+            .cta-box { padding: 48px 32px; }
+        }
+
+        /* ── Mobile landscape / small tablets (≤600px) ── */
+        @media (max-width: 600px) {
+            .features-grid { grid-template-columns: 1fr; gap: 14px; }
+            .steps { grid-template-columns: 1fr; gap: 36px; }
+
+            .step p { max-width: 100%; }
+
+            .browsers {
+                flex-direction: row;
+                justify-content: center;
+            }
+            .browser-badge {
+                flex: 1;
+                min-width: 90px;
+                max-width: 140px;
+                justify-content: center;
+                padding: 9px 12px;
+            }
+        }
+
+        /* ── Mobile portrait (≤480px) ── */
+        @media (max-width: 480px) {
+            :root { --nav-h: 58px; }
+
+            .container { padding: 0 16px; }
+
+            .nav-inner { padding: 0 16px; }
+            .nav-brand { font-size: 14px; gap: 8px; }
+            .nav-brand-icon { width: 24px; height: 24px; border-radius: 6px; }
+
+            .hero {
+                padding-top: calc(var(--nav-h) + 40px);
+                padding-bottom: 40px;
+            }
+
+            .hero h1 { font-size: clamp(26px, 7vw, 36px); }
+            .hero p { font-size: 14px; margin-bottom: 28px; }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .btn { width: 100%; max-width: 300px; }
+
+            .browsers {
+                margin-top: 28px;
+                gap: 8px;
+            }
+            .browser-badge {
+                flex: 1;
+                padding: 8px 8px;
+                font-size: 11px;
+                gap: 6px;
+                border-radius: 8px;
+            }
+            .browser-badge svg { width: 15px; height: 15px; }
+
+            .preview { padding: 32px 0 0; }
+            .preview-body { padding: 16px; gap: 10px; }
+            .preview-input { font-size: 12px; padding: 8px 10px; }
+            .preview-btn { width: 32px; height: 32px; }
+            .preview-btn svg { width: 14px; height: 14px; }
+
+            .features { padding: 56px 0; }
+            .feature-card { padding: 18px; }
+            .feature-icon { width: 36px; height: 36px; margin-bottom: 12px; }
+            .feature-icon svg { width: 18px; height: 18px; }
+            .section-desc { margin-bottom: 28px; }
+
+            .how { padding: 56px 0; }
+            .steps { gap: 32px; margin-top: 32px; }
+            .step-num { width: 42px; height: 42px; font-size: 16px; }
+            .step h3 { font-size: 15px; }
+            .step p { font-size: 13px; }
+
+            .faq { padding: 56px 0; }
+            .faq-list { margin-top: 28px; }
+            .faq-q { font-size: 14px; gap: 12px; }
+            .faq-a { font-size: 13px; }
+            .faq-item { padding: 16px 0; }
+
+            .cta { padding: 56px 0; }
+            .cta-box { padding: 36px 20px; }
+            .cta-box h2 { font-size: 22px; }
+            .cta-box p { font-size: 14px; margin-bottom: 24px; }
+            .btn-cta { width: 100%; max-width: 260px; justify-content: center; }
+
+            .footer-links { flex-direction: column; gap: 12px; align-items: center; }
+        }
+
+        /* ── Very small screens (≤360px) ── */
+        @media (max-width: 360px) {
+            .container { padding: 0 12px; }
+            .nav-inner { padding: 0 12px; }
+
+            .hero h1 { font-size: 24px; }
+            .hero p { font-size: 13px; }
+
+            .browsers { flex-direction: column; align-items: center; gap: 8px; }
+            .browser-badge { width: 100%; max-width: 220px; }
+
+            .preview-input { font-size: 11px; }
+
+            .hero-badge { font-size: 11px; padding: 4px 12px; }
+            .section-label { font-size: 11px; }
+        }
+
+        /* ── Ultra-wide (≥1400px) ── */
+        @media (min-width: 1400px) {
+            :root { --max-w: 1200px; }
+        }
+
+        /* ── Reduced motion ── */
+        @media (prefers-reduced-motion: reduce) {
+            .hero-badge-dot { animation: none; }
+            .btn-primary:hover,
+            .btn-cta:hover,
+            .browser-badge:hover { transform: none; }
+            *, *::before, *::after { transition-duration: 0ms !important; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="nav-brand">
+            <div class="nav-brand-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1.161l-8.441 4.221a1.25 1.25 0 0 1-1.118 0L3 6.161V5z"/>
+                    <path d="m21 8.839-7.77 3.885a2.75 2.75 0 0 1-2.46 0L3 8.839V15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839z"/>
+                </svg>
+            </div>
+            SecuredRelay
+        </a>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#how">How it works</a>
+            <a href="#faq">FAQ</a>
+            <a href="#download" class="nav-cta">Get Extension</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="download">
+    <div class="container">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            Available for Chrome, Firefox &amp; Edge
+        </div>
+        <h1>Your email,<br><span>protected everywhere</span></h1>
+        <p>Generate unique privacy aliases for any website. Stop spam, track data leaks, and keep your real inbox clean.</p>
+        <div class="hero-buttons">
+            <a href="#" class="btn btn-primary" target="_blank">Add to Edge</a>
+            <a href="privacy.html" class="btn btn-secondary" target="_blank">Privacy Policy</a>
+        </div>
+        <div class="browsers">
+            <a href="https://addons.mozilla.org/firefox/addon/securedrelay/" class="browser-badge" target="_blank">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12a4 4 0 0 1 8 0"/></svg>
+                Firefox
+            </a>
+            <a href="#" class="browser-badge" target="_blank">
+                <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4"/></svg>
+                Chrome
+            </a>
+            <a href="#" class="browser-badge" target="_blank">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0z"/><path d="M12 8v8m-4-4h8"/></svg>
+                Edge
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- PREVIEW -->
+<section class="preview">
+    <div class="container">
+        <div class="preview-window">
+            <div class="preview-bar">
+                <span class="preview-dot"></span>
+                <span class="preview-dot"></span>
+                <span class="preview-dot"></span>
+            </div>
+            <div class="preview-body">
+                <div class="preview-form">
+                    <span class="preview-label">Email Address</span>
+                    <div class="preview-input-row">
+                        <input type="text" class="preview-input" id="previewInput" value="" placeholder="Click the button to generate an alias..." readonly>
+                        <button class="preview-btn" id="previewBtn" title="Generate alias">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M3 4a2 2 0 0 0-2 2v1.161l8.441 4.221a1.25 1.25 0 0 0 1.118 0L19 7.161V6a2 2 0 0 0-2-2H3z"/>
+                                <path d="m19 8.839-7.77 3.885a2.75 2.75 0 0 1-2.46 0L1 8.839V14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="preview-hint" id="previewHint" style="display:none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Alias created and ready to use</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+    <div class="container">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Built for privacy</h2>
+        <p class="section-desc">Everything you need to keep your real email address off the internet.</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </div>
+                <h3>One-Click Aliases</h3>
+                <p>Generate a unique alias instantly from any email input field on any website.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <h3>Custom Prefixes</h3>
+                <p>Choose your own alias prefix or let the system generate one for you.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+                <h3>Domain Selector</h3>
+                <p>Choose which domain to use for your alias from your available options.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </div>
+                <h3>Copy to Clipboard</h3>
+                <p>Copy any alias address to your clipboard with a single click.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <h3>Forwarding Control</h3>
+                <p>Enable or disable any alias instantly. Emails stop the moment you flip the switch.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+                <h3>Track Data Leaks</h3>
+                <p>Use a unique alias per service. If spam arrives, you know exactly who leaked your data.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+    <div class="container">
+        <div class="section-label">How it works</div>
+        <h2 class="section-title">Three steps to privacy</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <h3>Install the extension</h3>
+                <p>Add SecuredRelay to your browser from the Chrome Web Store, Edge Add-ons, or Firefox Add-ons.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <h3>Sign in or register</h3>
+                <p>Create an account or sign in to connect the extension to your SecuredRelay account.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <h3>Generate aliases</h3>
+                <p>Click the alias button on any email field to generate a unique address on the spot.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+    <div class="container">
+        <div class="section-label">FAQ</div>
+        <h2 class="section-title">Frequently asked questions</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is an email alias?</div>
+                <div class="faq-a">An email alias is a unique forwarding address that delivers emails to your real inbox. Instead of giving out your real email, you use the alias. If it gets compromised, you can disable or delete it without affecting your actual address.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Where do emails sent to my alias go?</div>
+                <div class="faq-a">All emails sent to your alias are automatically forwarded to the real email address associated with your SecuredRelay account. The sender never sees your real address.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I stop using an alias?</div>
+                <div class="faq-a">Yes. You can disable an alias to stop forwarding temporarily, or delete it permanently. Any emails sent to a deleted alias will be rejected.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is the extension free?</div>
+                <div class="faq-a">Yes, SecuredRelay is free to install and use. Create an unlimited number of aliases and manage them all from your browser.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Does the extension collect my browsing data?</div>
+                <div class="faq-a">No. SecuredRelay does not collect browsing history, search queries, or any analytics. It only communicates with the SecuredRelay API for alias management. See our <a href="privacy.html" style="color: var(--accent);">Privacy Policy</a> for details.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Protect your inbox today</h2>
+            <p>One extension. Unlimited aliases. Zero tracking.</p>
+            <a href="#download" class="btn-cta">Get the Extension</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="footer-links">
+            <a href="privacy.html" target="_blank">Privacy Policy</a>
+            <a href="mailto:mail@rupom.dev">Contact</a>
+        </div>
+        <p>&copy; 2026 SecuredRelay. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+    var previewInput = document.getElementById('previewInput');
+    var previewBtn   = document.getElementById('previewBtn');
+    var previewHint  = document.getElementById('previewHint');
+
+    var prefixes = ['shield','guard','relay','vault','mask','ghost','shadow','echo','pixel','atlas','nova','onyx','zen','flux','drift','orbit','pulse','apex','bolt','wave'];
+    var domains  = ['example.com','domain.com','sample.org','testmail.net','inbox.me','mail.dev','alias.io'];
+
+    function generateAlias() {
+        var prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+        var num    = Math.floor(Math.random() * 9000) + 1000;
+        var domain = domains[Math.floor(Math.random() * domains.length)];
+        return prefix + num + '@' + domain;
+    }
+
+    previewBtn.addEventListener('click', function () {
+        previewInput.value = '';
+        previewHint.style.display = 'none';
+        previewBtn.style.opacity = '0.5';
+        previewBtn.style.pointerEvents = 'none';
+
+        setTimeout(function () {
+            var alias = generateAlias();
+            var i = 0;
+            var interval = setInterval(function () {
+                if (i < alias.length) {
+                    previewInput.value += alias[i];
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    previewHint.style.display = 'flex';
+                    previewBtn.style.opacity = '1';
+                    previewBtn.style.pointerEvents = 'auto';
+                }
+            }, 30);
+        }, 400);
+    });
+</script>
+
+</body>
+</html>

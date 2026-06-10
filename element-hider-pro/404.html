@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 — Element Hider Pro</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    :root {
+      --bg: #ffffff; --bg-subtle: #f8f9fb; --fg: #0f172a; --fg-2: #475569;
+      --fg-3: #94a3b8; --border: #e2e8f0; --accent: #4f46e5; --accent-light: #eef2ff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f172a; --bg-subtle: #1e293b; --fg: #f1f5f9; --fg-2: #cbd5e1;
+        --fg-3: #64748b; --border: #334155; --accent: #818cf8; --accent-light: rgba(129, 140, 248, 0.1);
+      }
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--fg);
+      min-height: 100vh; display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    .nav-inner {
+      max-width: 1080px; margin: 0 auto; padding: 0 24px;
+      height: 60px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 16px; font-weight: 700; color: var(--fg); text-decoration: none;
+    }
+    .nav-brand img { width: 28px; height: 28px; border-radius: 6px; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a { font-size: 14px; color: var(--fg-2); text-decoration: none; transition: color 150ms; }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-cta {
+      padding: 8px 18px; font-size: 13px; font-weight: 600;
+      color: #fff !important; background: var(--accent); border-radius: 8px;
+      text-decoration: none; transition: opacity 150ms;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* MAIN */
+    main {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 60px 24px;
+    }
+    .wrap { text-align: center; }
+    .code { font-size: 96px; font-weight: 800; color: var(--accent); line-height: 1; }
+    .msg { font-size: 18px; font-weight: 600; margin: 16px 0 8px; }
+    .sub { font-size: 14px; color: var(--fg-2); }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 40px 0; text-align: center; }
+    footer p { font-size: 13px; color: var(--fg-3); }
+    footer a { color: var(--fg-2); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+    .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 12px; }
+
+    @media (max-width: 480px) {
+      .nav-links a:not(.nav-cta) { display: none; }
+      .links { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 240px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">
+        <img src="icons/icon48.png" alt="">
+        Element Hider Pro
+      </a>
+      <div class="nav-links">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#how">How it works</a>
+        <a href="index.html#faq">FAQ</a>
+        <a href="index.html#download" class="nav-cta">Get Extension</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="wrap">
+      <div class="code">404</div>
+      <p class="msg">Page not found</p>
+      <p class="sub">The page you're looking for doesn't exist or has been moved.</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://github.com" target="_blank">GitHub</a>
+        <a href="https://rupom.dev" target="_blank">Developer</a>
+      </div>
+      <p>&copy; 2026 Element Hider Pro. Built with care.</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DevStack Studio — Browser Extensions</title>
   <meta name="description" content="A collection of privacy-first, clean, and useful browser extensions built by DevStack Studio.">
-  <link rel="icon" type="image/png" sizes="48x48" href="favicon.png">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; }
 
@@ -641,7 +640,7 @@
       <p>&copy; 2026 DevStack Studio</p>
       <div class="foot-links">
         <a href="mailto:mail@rupom.dev">Contact</a>
-        <a href="https://github.com/RupomChowdhury" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/DevStack-Studio" target="_blank" rel="noopener">GitHub</a>
       </div>
     </div>
   </footer>
@@ -662,6 +661,12 @@
         slug: 'securedrelay',
         desc: 'Generate unique email aliases on the fly. Protect your real inbox from spam, tracking, and data leaks.',
         tags: ['Email Aliases', 'Spam Protection', 'Privacy']
+      },
+      {
+        name: 'Text Splitter & Counter',
+        slug: 'textsplitter',
+        desc: 'Split text into parts by words, characters, sentences, or paragraphs. Count metrics and export slices easily.',
+        tags: ['Text Split', 'Word Count', 'Export', 'Side Panel']
       }
     ];
 
@@ -693,7 +698,7 @@
         }
 
         out += ''
-          + '<a href="' + escA(e.slug) + '" class="work-row" target="_blank">'
+          + '<a href="' + escA(e.slug) + '/" class="work-row">'
           +   '<div class="work-num">' + num + '</div>'
           +   '<div class="work-info">'
           +     '<div class="work-name">' + esc(e.name) + '</div>'
